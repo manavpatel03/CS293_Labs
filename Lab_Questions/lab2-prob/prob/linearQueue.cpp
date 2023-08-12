@@ -18,7 +18,7 @@ bool DynamicQueue<T>::isFull()
 template <typename T>
 void DynamicQueue<T>::grow()
 {
-  int new_size = N * 2;                         // We observed the growth in our lab !!
+  int new_size = N + 1000;                         // We observed the growth in our lab !!
   T *tmp = (T *)malloc(sizeof(int) * new_size); // New array
   for (unsigned i = 0; i < N; i++)
   { // copy from the old array
@@ -44,7 +44,7 @@ void DynamicQueue<T>::QInsert(T x)
     {
       A[i] = A[head + i];
     }
-    tail -= head;
+    tail = tail - head;
     head = 0;
   }
   else if (isFull())
@@ -59,6 +59,10 @@ bool DynamicQueue<T>::QDelete(T *x)
   if (isEmpty())
     return false;
   *x = A[head];
-  head++;
+  if(head == N - 1) {
+    head = 0;
+    tail = 0;
+  }
+  else head++;
   return true;
 }
