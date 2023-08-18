@@ -18,7 +18,7 @@ bool DynamicQueue<T>::isFull()
 template <typename T>
 void DynamicQueue<T>::grow()
 {
-  int new_size = N * 2; // We observed the growth in our lab !!
+  int new_size = N + 1000; // We observed the growth in our lab !!
   T *tmp = (T *)malloc(sizeof(int) * new_size);
   for (int i = 0; i < N; i++)
   {
