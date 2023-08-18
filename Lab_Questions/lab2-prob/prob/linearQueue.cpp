@@ -6,13 +6,13 @@ using namespace std;
 template <typename T>
 bool DynamicQueue<T>::isEmpty()
 {
-  return (head == tail); // dummy return
+  return (head == tail);
 }
 
 template <typename T>
 bool DynamicQueue<T>::isFull()
 {
-  return (tail == N) && (head == 0); // checks if
+  return (tail == N) && (head == 0);
 }
 
 template <typename T>
