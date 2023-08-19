@@ -3,7 +3,7 @@
 
 bool comp(char *a, char *b)
 {
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < 32 && a[i] != 0 && b[i] != 0; i++)
         if (a[i] != b[i])
             return false;
     return true;
@@ -44,7 +44,7 @@ int Dictionary::findFreeIndex(char key[])
         int i = hash_val + 1;
         while (i % N != hash_val)
         {
-            if (A[i].key == NULL || A[i].key[0] == 0)
+            if (A[i % N].key == NULL || A[i % N].key[0] == 0)
                 return i;
         }
     }
@@ -61,8 +61,8 @@ struct Entry *Dictionary::get(char key[])
     i++;
     while (i % N != hash)
     {
-        if (hashValue(A[i].key) == hash && A[i].key[0] != 0)
-            return &A[i];
+        if (hashValue(A[i % N].key) == hash && A[i % N].key[0] != 0)
+            return &A[i % N];
         i++;
     }
     return NULL;
