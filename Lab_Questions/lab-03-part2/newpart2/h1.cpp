@@ -5,20 +5,23 @@ using namespace std;
 int main()
 {
     long long int n;
-    int count = 0;
     queue<int> Q;
     cin >> n;
-    while (n != 1)
+    int x;
+    while (n > 1)
     {
-        Q.push(n % 256);
-        n /= 256;
-        count++;
+        x = n % 256;
+        Q.push(x);
+        cout << x << endl;
+        n = n/256;
     }
-    char *S = new char(count + 1);
-    for (int i = 0; i < n; i++)
+    char S[Q.size() + 1];
+    int size = Q.size();
+    for (int i = 0; i < size; i++)
     {
-        S[i] = Q.front();
+        S[i] = char(Q.front());
         Q.pop();
     }
-    cout << S;
+    cout << endl;
+    for(int i = size;i >= 0;i--) cout << S[i];
 }
