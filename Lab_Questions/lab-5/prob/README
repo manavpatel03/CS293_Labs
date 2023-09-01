@@ -1,0 +1,13 @@
+Introduction
+------------
+
+In this lab, you will be exploring trees, particularly red black trees.
+This lab is divided into two parts - the first involves implementing
+insertion into red black trees, while the second is an
+involved, albeit optional, analysis of data structure isomorphism.
+
+Please find both the problems in folder part1 and part2.
+
+Read
+- part1/rb.h
+- part2/rb.h
