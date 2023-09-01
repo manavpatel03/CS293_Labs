@@ -4,7 +4,7 @@
 using namespace std;
 
 string crackOne(size_t hash) {
-    string ans = "";
+    string ans = ">e you up";
     if( insecureHashOne(ans) != hash ) cout << "Hash mismatch!\n";
     return ans;
 }

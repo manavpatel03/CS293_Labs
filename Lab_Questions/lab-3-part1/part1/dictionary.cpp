@@ -24,17 +24,15 @@ Dictionary::Dictionary()
 int Dictionary::hashValue(char key[])
 {
     int hashValue = 0;
-    long long int poly = 0;
+    long double poly = 0;
     int i = 0;
     while (key[i] != 0)
     {
-
-        poly += (int(key[i]) * pow(33, i));
+        poly += ((int(key[i]) * pow(31, i)) * (sqrt(5) - 1) / 2) - floor((int(key[i]) * pow(31, i)) * (sqrt(5) - 1) / 2);
         i++;
     }
-    double pol = poly * (sqrt(5) - 1) / 2;
-    pol = pol - floor(pol);
-    hashValue = int(floor(N * pol));
+    poly = poly - floor(poly);
+    hashValue = int(floor(N * poly));
     return hashValue;
 }
 
@@ -48,10 +46,11 @@ int Dictionary::findFreeIndex(char key[])
         int i = hash_val + 1;
         while (i % N != hash_val)
         {
-            if (A[i % N].key == NULL || A[i % N].key[0] == 0)
+            if (A[i % N].key == NULL)
                 return i % N;
-            else if (comp(A[i].key, key))
+            else if (A[i % N].key[0] == 0)
                 return i % N;
+            i++;
         }
     }
 
@@ -62,13 +61,20 @@ struct Entry *Dictionary::get(char key[])
 {
     int i = hashValue(key);
     int hash = i;
+    if (A[i].key == NULL)
+        return NULL;
     if (comp(A[i].key, key))
         return &A[i];
     i++;
     while (i % N != hash)
     {
-        if (A[i % N].key == NULL || key == NULL || A[i % N].key[0] == 0)
+        if (A[i % N].key == NULL || key == NULL)
             return NULL;
+        if (A[i % N].key[0] == 0)
+        {
+            i++;
+            continue;
+        }
         if (hashValue(A[i % N].key) == hash && A[i % N].key[0] != 0)
             return &A[i % N];
         i++;
@@ -90,6 +96,8 @@ bool Dictionary::remove(char key[])
 {
     int hash_value = hashValue(key);
     int i = hash_value;
+    if (A[hash_value].key == NULL)
+        return false;
     if (hashValue(A[hash_value].key) == hash_value)
     {
         A[hash_value].key[0] = '\0';
@@ -98,8 +106,13 @@ bool Dictionary::remove(char key[])
     i++;
     while (i % N != hash_value)
     {
-        if (A[i % N].key == NULL || A[i % N].key[0] == 0)
+        if (A[i % N].key == NULL)
             return false;
+        if (A[i % N].key[0] == 0)
+        {
+            i++;
+            continue;
+        }
         if (hashValue(A[i % N].key) == hash_value && A[i % N].key[0] != 0)
         {
             A[i % N].key[0] = '\0';
