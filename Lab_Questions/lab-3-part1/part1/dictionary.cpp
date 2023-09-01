@@ -3,7 +3,8 @@
 
 bool comp(char *a, char *b)
 {
-    if(a[0] == 0 || b[0] == 0 || a == NULL || b == NULL)  return false;
+    if (a[0] == 0 || b[0] == 0 || a == NULL || b == NULL)
+        return false;
     for (int i = 0; i < 32 && a[i] != 0 && b[i] != 0; i++)
         if (a[i] != b[i])
             return false;
@@ -27,6 +28,7 @@ int Dictionary::hashValue(char key[])
     int i = 0;
     while (key[i] != 0)
     {
+
         poly += (int(key[i]) * pow(33, i));
         i++;
     }
@@ -48,8 +50,9 @@ int Dictionary::findFreeIndex(char key[])
         {
             if (A[i % N].key == NULL || A[i % N].key[0] == 0)
                 return i % N;
-            else if(comp(A[i].key,key)) return i%N;
-       }
+            else if (comp(A[i].key, key))
+                return i % N;
+        }
     }
 
     return -1;
@@ -64,7 +67,8 @@ struct Entry *Dictionary::get(char key[])
     i++;
     while (i % N != hash)
     {
-        if(A[i%N].key == NULL || key == NULL ||A[i % N].key[0] == 0) return NULL;
+        if (A[i % N].key == NULL || key == NULL || A[i % N].key[0] == 0)
+            return NULL;
         if (hashValue(A[i % N].key) == hash && A[i % N].key[0] != 0)
             return &A[i % N];
         i++;
@@ -94,10 +98,11 @@ bool Dictionary::remove(char key[])
     i++;
     while (i % N != hash_value)
     {
-        if(A[i%N].key == NULL || A[i % N].key[0] == 0) return false;
-        if (hashValue(A[i%N].key) == hash_value && A[i%N].key[0] != 0)
+        if (A[i % N].key == NULL || A[i % N].key[0] == 0)
+            return false;
+        if (hashValue(A[i % N].key) == hash_value && A[i % N].key[0] != 0)
         {
-            A[i%N].key[0] = '\0';
+            A[i % N].key[0] = '\0';
             return true;
         }
         i++;
