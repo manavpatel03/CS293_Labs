@@ -15,6 +15,7 @@ ptr RedBlackTree::insert(int data)
 	{
 		root = newnodePtr;
 		root->color = 0; // set root color as black
+
 		return newnodePtr;
 	}
 	insert(root, newnodePtr);
@@ -37,7 +38,8 @@ void RedBlackTree::insert(ptr start, ptr newnodePtr)
 		}
 		else
 			RedBlackTree::insert(start->right, newnodePtr);
-		RedBlackTree::fixup(start->right);
+		if (start->color == 1)
+			RedBlackTree::fixup(start->right);
 	}
 	else if (start->data > newnodePtr->data)
 	{
@@ -49,7 +51,8 @@ void RedBlackTree::insert(ptr start, ptr newnodePtr)
 		}
 		else
 			RedBlackTree::insert(start->left, newnodePtr);
-		RedBlackTree::fixup(start->left);
+		if (start->color == 1)
+			RedBlackTree::fixup(start->left);
 	}
 	// recurse down the tree
 
@@ -76,8 +79,16 @@ void RedBlackTree::printRBT(ptr start, const std::string &prefix, bool isLeftChi
 void RedBlackTree::rightrotate(ptr loc)
 {
 	ptr temp = loc->parent->right;
-	loc->parent->right = loc;
-	loc->parent->left = temp;
+	if (loc->parent->right == NULL)
+	{
+		loc->parent->right = loc;
+		loc->parent->left = NULL;
+	}
+	else
+	{
+		loc->parent->right = loc;
+		loc->parent->left = temp;
+	}
 	loc->data = loc->data + loc->parent->data;
 	loc->parent->data = loc->data - loc->parent->data;
 	loc->data = loc->data - loc->parent->data;
@@ -145,49 +156,63 @@ void RedBlackTree::leftrotate(ptr loc)
 // caused by RBT insertion
 void RedBlackTree::fixup(ptr loc)
 {
-	if (loc->parent->color == 0)
-		return;
 	if (loc->parent->parent->right == loc->parent)
 	{
-		if (loc->parent->parent->left == NULL || loc->parent->parent->left->color == 1)
+		if (loc->parent->parent->left == NULL || loc->parent->parent->left->color == 0)
 		{
-			if (!loc->parent->parent->parent == NULL)
-				loc->parent->parent->color = 1;
-			else
-				loc->parent->parent->color = 0;
+			if (loc->parent->left == loc)
+				rightrotate(loc);
+			leftrotate(loc->parent);
+			return;
+		}
+		if (loc->parent->parent->left->color == 1)
+		{
 			if (loc->parent->parent->left != NULL)
 				loc->parent->parent->left->color = 0;
 			loc->parent->color = 0;
-			if (loc->parent->parent->parent->color == 1)
+			if (loc->parent->parent->parent == NULL)
+			{
+				loc->parent->parent->color = 0;
+			}
+			else if (loc->parent->parent->parent->color == 1)
+			{
 				fixup(loc->parent->parent);
+			}
+			else
+			{
+				loc->parent->parent->color = 1;
+			}
 			return;
 		}
-		if (loc->parent->left == loc)
-			rightrotate(loc);
-		else
-			leftrotate(loc->parent);
-		return;
 	}
 	else
 	{
-		if (loc->parent->parent->right == NULL || loc->parent->parent->right->color == 1)
+		if (loc->parent->parent->right == NULL || loc->parent->parent->right->color == 0)
 		{
-			if (!loc->parent->parent->parent == NULL)
-				loc->parent->parent->color = 1;
-			else
-				loc->parent->parent->color = 0;
+			if (loc->parent->right == loc)
+				leftrotate(loc);
+			rightrotate(loc->parent);
+			return;
+		}
+		if (loc->parent->parent->right->color == 1)
+		{
 			if (loc->parent->parent->right != NULL)
 				loc->parent->parent->right->color = 0;
 			loc->parent->color = 0;
-			if (loc->parent->parent->parent->color == 1)
+			if (loc->parent->parent->parent == NULL)
+			{
+				loc->parent->parent->color = 0;
+			}
+			else if (loc->parent->parent->parent->color == 1)
+			{
 				fixup(loc->parent->parent);
+			}
+			else
+			{
+				loc->parent->parent->color = 1;
+			}
 			return;
 		}
-		if (loc->parent->right == loc)
-			leftrotate(loc);
-		else
-			rightrotate(loc->parent);
-		return;
 	}
 }
 
@@ -227,7 +252,6 @@ int main()
 
 		// calling function to preserve properties of rb
 		// tree
-		tree.fixup(newnodePtr);
 	}
 	tree.printRBT(tree.getRoot());
 
